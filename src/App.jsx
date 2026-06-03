@@ -4,6 +4,7 @@ import "./App.css";
 
 import Layout from "./components/Layout";
 import Categories from "./pages/Categories";
+import Chat from "./pages/Chat";
 import Clients from "./pages/Clients";
 import Dashboard from "./pages/Dashboard";
 import Employees from "./pages/Employees";
@@ -25,6 +26,7 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="products" element={<Products />} />
         <Route path="categories" element={<Categories />} />
+        <Route path="chat" element={<Chat />} />
         <Route path="orders" element={<Orders />} />
         <Route path="clients" element={<Clients />} />
         <Route path="suppliers" element={<Suppliers />} />

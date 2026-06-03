@@ -5,6 +5,7 @@ import {
   ChevronDown,
   LogOut,
   Menu,
+  MessageSquareText,
   Settings,
   Tags,
   Truck,
@@ -116,6 +117,10 @@ export default function Layout() {
                   <Link to="/reports" onClick={() => setIsProfileOpen(false)}>
                     <BarChart3 size={17} />
                     <span>Переглянути звіти</span>
+                  </Link>
+                  <Link to="/chat" onClick={() => setIsProfileOpen(false)}>
+                    <MessageSquareText size={17} />
+                    <span>Відкрити чат</span>
                   </Link>
 
                   <span className="profile-section-label">Адміністрування</span>
