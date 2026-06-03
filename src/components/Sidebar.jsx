@@ -1,32 +1,58 @@
-import { Link } from "react-router-dom";
+import {
+  BarChart3,
+  Boxes,
+  Building2,
+  Home,
+  LogOut,
+  Package,
+  Settings,
+  ShoppingBag,
+  Tags,
+  Truck,
+  UserCog,
+  Users,
+} from "lucide-react";
+import { NavLink } from "react-router-dom";
+
+const navItems = [
+  { label: "Головна", path: "/dashboard", icon: Home },
+  { label: "Товари", path: "/products", icon: ShoppingBag },
+  { label: "Категорії", path: "/categories", icon: Tags },
+  { label: "Замовлення", path: "/orders", icon: Package },
+  { label: "Клієнти", path: "/clients", icon: Users },
+  { label: "Постачальники", path: "/suppliers", icon: Truck },
+  { label: "Працівники", path: "/employees", icon: UserCog },
+  { label: "Звіти", path: "/reports", icon: BarChart3 },
+  { label: "Користувачі", path: "/users", icon: Boxes },
+  { label: "Налаштування", path: "/settings", icon: Settings },
+];
 
 export default function Sidebar() {
   return (
-    <aside
-      style={{
-        width: "250px",
-        background: "#1f2937",
-        color: "white",
-        padding: "20px",
-      }}
-    >
-      <h2>Enterprise System</h2>
+    <aside className="sidebar">
+      <div className="brand">
+        <div className="brand-mark">
+          <Building2 size={25} />
+        </div>
+        <div>
+          <strong>АС Управління</strong>
+          <span>підприємством</span>
+        </div>
+      </div>
 
-      <nav
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          marginTop: "20px",
-        }}
-      >
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/products">Products</Link>
-        <Link to="/orders">Orders</Link>
-        <Link to="/users">Users</Link>
-        <Link to="/reports">Reports</Link>
-        <Link to="/settings">Settings</Link>
+      <nav className="side-nav" aria-label="Основна навігація">
+        {navItems.map(({ label, path, icon: Icon }) => (
+          <NavLink key={path} className="side-link" to={path}>
+            <Icon size={18} />
+            <span>{label}</span>
+          </NavLink>
+        ))}
       </nav>
+
+      <NavLink className="side-link logout-link" to="/login">
+        <LogOut size={18} />
+        <span>Вийти</span>
+      </NavLink>
     </aside>
   );
 }
