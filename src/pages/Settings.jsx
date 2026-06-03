@@ -199,7 +199,6 @@ export default function Settings() {
               Мова інтерфейсу
               <select name="interfaceLanguage" value={system.interfaceLanguage} onChange={updateSystem}>
                 <option value="uk">Українська</option>
-                <option value="ru">Російська</option>
                 <option value="en">English</option>
               </select>
             </label>
