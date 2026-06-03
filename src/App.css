@@ -234,6 +234,15 @@
   background: #f4f8ff;
 }
 
+.profile-section-label {
+  display: block;
+  padding: 11px 16px 5px;
+  color: #7a8698;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .content {
   flex: 1;
   padding: 24px;
@@ -729,7 +738,8 @@
   font-weight: 700;
 }
 
-.product-form input {
+.product-form input,
+.product-form select {
   height: 42px;
   min-width: 0;
   padding: 0 12px;
@@ -737,9 +747,11 @@
   border-radius: 5px;
   color: #172033;
   outline: 0;
+  background: #ffffff;
 }
 
-.product-form input:focus {
+.product-form input:focus,
+.product-form select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(40, 120, 232, 0.12);
 }

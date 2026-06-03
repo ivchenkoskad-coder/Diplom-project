@@ -1,5 +1,16 @@
 import { useState } from "react";
-import { Bell, ChevronDown, LogOut, Menu, Settings, UserCircle, Users } from "lucide-react";
+import {
+  BarChart3,
+  Bell,
+  ChevronDown,
+  LogOut,
+  Menu,
+  Settings,
+  Tags,
+  UserCog,
+  UserCircle,
+  Users,
+} from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
@@ -49,6 +60,22 @@ export default function Layout() {
                       <span>admin@enterprise.local</span>
                     </div>
                   </div>
+
+                  <span className="profile-section-label">Швидкі дії</span>
+                  <Link to="/employees?action=add" onClick={() => setIsProfileOpen(false)}>
+                    <UserCog size={17} />
+                    <span>Додати працівника</span>
+                  </Link>
+                  <Link to="/categories?action=add" onClick={() => setIsProfileOpen(false)}>
+                    <Tags size={17} />
+                    <span>Додати категорію</span>
+                  </Link>
+                  <Link to="/reports" onClick={() => setIsProfileOpen(false)}>
+                    <BarChart3 size={17} />
+                    <span>Переглянути звіти</span>
+                  </Link>
+
+                  <span className="profile-section-label">Адміністрування</span>
                   <Link to="/users" onClick={() => setIsProfileOpen(false)}>
                     <Users size={17} />
                     <span>Користувачі</span>
