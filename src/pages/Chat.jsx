@@ -1,69 +1,8 @@
 import { useMemo, useState } from "react";
 import { CheckCheck, MessageSquareText, Search, Send, UsersRound } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-const conversations = [
-  {
-    id: "general",
-    name: "Загальний чат",
-    type: "Канал",
-    members: "18 працівників",
-    unread: 2,
-    online: true,
-  },
-  {
-    id: "sales",
-    name: "Відділ продажів",
-    type: "Канал",
-    members: "6 працівників",
-    unread: 1,
-    online: true,
-  },
-  {
-    id: "warehouse",
-    name: "Склад",
-    type: "Канал",
-    members: "5 працівників",
-    unread: 0,
-    online: true,
-  },
-  {
-    id: "manager",
-    name: "Марина Бойко",
-    type: "Менеджер",
-    members: "онлайн",
-    unread: 0,
-    online: true,
-  },
-  {
-    id: "logistics",
-    name: "Дмитро Коваль",
-    type: "Логіст",
-    members: "був 12 хв тому",
-    unread: 0,
-    online: false,
-  },
-];
-
-const initialMessages = {
-  general: [
-    { id: 1, author: "Ірина Савчук", role: "Адміністратор", text: "Оновлено графік резервного копіювання.", time: "09:15", mine: false },
-    { id: 2, author: "Олександр Дяченко", role: "Аналітик", text: "Підготував звіт по замовленнях за тиждень.", time: "09:40", mine: false },
-    { id: 3, author: "Ви", role: "Адміністратор", text: "Перевірю і додам у розділ звітів.", time: "09:44", mine: true },
-  ],
-  sales: [
-    { id: 1, author: "Марина Бойко", role: "Менеджер", text: "Клієнт ТОВ Компанія А просить підтвердити наявність товару.", time: "10:10", mine: false },
-    { id: 2, author: "Ви", role: "Адміністратор", text: "Передайте запит на склад, відповідь потрібна до обіду.", time: "10:12", mine: true },
-  ],
-  warehouse: [
-    { id: 1, author: "Андрій Мороз", role: "Комірник", text: "Ноутбуки Lenovo отримано, 12 одиниць вже на складі.", time: "08:55", mine: false },
-  ],
-  manager: [
-    { id: 1, author: "Марина Бойко", role: "Менеджер", text: "Можу додати нового клієнта після погодження договору?", time: "11:05", mine: false },
-  ],
-  logistics: [
-    { id: 1, author: "Дмитро Коваль", role: "Логіст", text: "Доставка по замовленню #10045 запланована на завтра.", time: "Вчора", mine: false },
-  ],
-};
+import { conversations, initialMessages } from "../features/employee-chat/data";
 
 function getCurrentTime() {
   return new Date().toLocaleTimeString("uk-UA", {
@@ -79,19 +18,53 @@ export default function Chat() {
   const [messages, setMessages] = useState(initialMessages);
   const [readConversations, setReadConversations] = useState([]);
   const [status, setStatus] = useState("Чат готовий до роботи");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const requestedConversation = searchParams.get("conversation");
+  const requestedName = searchParams.get("name");
+  const requestedRole = searchParams.get("role") ?? "Працівник";
+  const requestedPresence = searchParams.get("presence") ?? "новий працівник";
+
+  const visibleConversations = useMemo(() => {
+    const hasConversation = conversations.some((conversation) => conversation.id === requestedConversation);
+
+    if (!requestedConversation || !requestedName || hasConversation) {
+      return conversations;
+    }
+
+    return [
+      {
+        id: requestedConversation,
+        name: requestedName,
+        type: requestedRole,
+        members: requestedPresence,
+        unread: 0,
+        online: requestedPresence === "онлайн" || requestedPresence === "новий працівник",
+      },
+      ...conversations,
+    ];
+  }, [requestedConversation, requestedName, requestedPresence, requestedRole]);
+
+  const requestedExists = visibleConversations.some((conversation) => conversation.id === requestedConversation);
+  const selectedId = requestedExists ? requestedConversation : activeId;
 
   const filteredConversations = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return conversations.filter((conversation) => conversation.name.toLowerCase().includes(normalizedQuery));
-  }, [query]);
+    return visibleConversations.filter((conversation) => conversation.name.toLowerCase().includes(normalizedQuery));
+  }, [query, visibleConversations]);
 
-  const activeConversation = conversations.find((conversation) => conversation.id === activeId) ?? conversations[0];
+  const activeConversation = visibleConversations.find((conversation) => conversation.id === selectedId) ?? visibleConversations[0];
   const activeMessages = messages[activeConversation.id] ?? [];
 
   function openConversation(conversationId) {
     setActiveId(conversationId);
     setReadConversations((current) => [...new Set([...current, conversationId])]);
     setStatus("Відкрито переписку");
+
+    if (requestedConversation) {
+      navigate("/chat", { replace: true });
+    }
   }
 
   function sendMessage(event) {
@@ -122,7 +95,7 @@ export default function Chat() {
   }
 
   function markAllRead() {
-    setReadConversations(conversations.map((conversation) => conversation.id));
+    setReadConversations(visibleConversations.map((conversation) => conversation.id));
     setStatus("Усі повідомлення позначено як прочитані");
   }
 
@@ -190,16 +163,23 @@ export default function Chat() {
           </header>
 
           <div className="message-list">
-            {activeMessages.map((message) => (
-              <div className={`message ${message.mine ? "mine" : ""}`} key={message.id}>
-                <div>
-                  <strong>{message.author}</strong>
-                  <span>{message.role}</span>
+            {activeMessages.length ? (
+              activeMessages.map((message) => (
+                <div className={`message ${message.mine ? "mine" : ""}`} key={message.id}>
+                  <div>
+                    <strong>{message.author}</strong>
+                    <span>{message.role}</span>
+                  </div>
+                  <p>{message.text}</p>
+                  <small>{message.time}</small>
                 </div>
-                <p>{message.text}</p>
-                <small>{message.time}</small>
+              ))
+            ) : (
+              <div className="empty-chat">
+                <strong>Нова переписка</strong>
+                <span>Напишіть перше повідомлення працівнику.</span>
               </div>
-            ))}
+            )}
           </div>
 
           <form className="chat-compose" onSubmit={sendMessage}>

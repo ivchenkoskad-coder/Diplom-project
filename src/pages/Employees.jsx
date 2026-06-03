@@ -1,25 +1,9 @@
 import { useState } from "react";
-import { Plus, UserCog, X } from "lucide-react";
+import { MessageSquareText, Plus, UserCog, X } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import DataTable from "../components/DataTable";
-
-const initialEmployees = [
-  { name: "Марина Бойко", role: "Менеджер з продажів", department: "Відділ продажів", status: "Працює" },
-  { name: "Олександр Дяченко", role: "Аналітик", department: "Фінансовий відділ", status: "Працює" },
-  { name: "Ірина Савчук", role: "Адміністратор", department: "IT-відділ", status: "Працює" },
-  { name: "Дмитро Коваль", role: "Логіст", department: "Склад", status: "Працює" },
-  { name: "Вікторія Лисенко", role: "Бухгалтер", department: "Бухгалтерія", status: "Працює" },
-  { name: "Андрій Мороз", role: "Комірник", department: "Склад", status: "Працює" },
-  { name: "Сергій Павленко", role: "Оператор", department: "Відділ замовлень", status: "Працює" },
-];
-
-const columns = [
-  { key: "name", label: "Працівник" },
-  { key: "role", label: "Посада" },
-  { key: "department", label: "Підрозділ" },
-  { key: "status", label: "Статус" },
-];
+import { employeeDirectory } from "../features/employee-chat/data";
 
 const positions = [
   "Адміністратор",
@@ -53,13 +37,29 @@ const emptyEmployee = {
 };
 
 export default function Employees() {
-  const [rows, setRows] = useState(initialEmployees);
+  const [rows, setRows] = useState(employeeDirectory);
   const [form, setForm] = useState(emptyEmployee);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isAddAction = searchParams.get("action") === "add";
   const isModalVisible = isModalOpen || isAddAction;
+  const columns = [
+    { key: "name", label: "Працівник" },
+    { key: "role", label: "Посада" },
+    { key: "department", label: "Підрозділ" },
+    { key: "status", label: "Статус" },
+    {
+      key: "actions",
+      label: "Дії",
+      render: (employee) => (
+        <button className="table-action-button" type="button" onClick={() => openChat(employee)}>
+          <MessageSquareText size={16} />
+          <span>Написати</span>
+        </button>
+      ),
+    },
+  ];
 
   function updateField(event) {
     const { name, value } = event.target;
@@ -80,8 +80,28 @@ export default function Employees() {
 
   function addEmployee(event) {
     event.preventDefault();
-    setRows((current) => [form, ...current]);
+    const employeeId = Date.now();
+    const employee = {
+      ...form,
+      id: `employee-${employeeId}`,
+      chatId: `custom-${employeeId}`,
+      presence: form.status === "Працює" ? "новий працівник" : form.status.toLowerCase(),
+      online: form.status === "Працює",
+    };
+
+    setRows((current) => [employee, ...current]);
     closeModal();
+  }
+
+  function openChat(employee) {
+    const params = new URLSearchParams({
+      conversation: employee.chatId ?? "general",
+      name: employee.name,
+      role: employee.role,
+      presence: employee.presence ?? employee.status,
+    });
+
+    navigate(`/chat?${params.toString()}`);
   }
 
   return (

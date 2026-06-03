@@ -1,0 +1,130 @@
+export const employeeDirectory = [
+  {
+    id: "employee-maryna",
+    chatId: "manager",
+    name: "Марина Бойко",
+    role: "Менеджер з продажів",
+    department: "Відділ продажів",
+    status: "Працює",
+    presence: "онлайн",
+    online: true,
+  },
+  {
+    id: "employee-oleksandr",
+    chatId: "oleksandr",
+    name: "Олександр Дяченко",
+    role: "Аналітик",
+    department: "Фінансовий відділ",
+    status: "Працює",
+    presence: "онлайн",
+    online: true,
+  },
+  {
+    id: "employee-iryna",
+    chatId: "iryna",
+    name: "Ірина Савчук",
+    role: "Адміністратор",
+    department: "IT-відділ",
+    status: "Працює",
+    presence: "онлайн",
+    online: true,
+  },
+  {
+    id: "employee-dmytro",
+    chatId: "logistics",
+    name: "Дмитро Коваль",
+    role: "Логіст",
+    department: "Склад",
+    status: "Працює",
+    presence: "був 12 хв тому",
+    online: false,
+  },
+  {
+    id: "employee-viktoriia",
+    chatId: "viktoriia",
+    name: "Вікторія Лисенко",
+    role: "Бухгалтер",
+    department: "Бухгалтерія",
+    status: "Працює",
+    presence: "онлайн",
+    online: true,
+  },
+  {
+    id: "employee-andrii",
+    chatId: "andrii",
+    name: "Андрій Мороз",
+    role: "Комірник",
+    department: "Склад",
+    status: "Працює",
+    presence: "на складі",
+    online: true,
+  },
+  {
+    id: "employee-serhii",
+    chatId: "serhii",
+    name: "Сергій Павленко",
+    role: "Оператор",
+    department: "Відділ замовлень",
+    status: "Працює",
+    presence: "онлайн",
+    online: true,
+  },
+];
+
+const channelConversations = [
+  {
+    id: "general",
+    name: "Загальний чат",
+    type: "Канал",
+    members: "18 працівників",
+    unread: 2,
+    online: true,
+  },
+  {
+    id: "sales",
+    name: "Відділ продажів",
+    type: "Канал",
+    members: "6 працівників",
+    unread: 1,
+    online: true,
+  },
+  {
+    id: "warehouse",
+    name: "Склад",
+    type: "Канал",
+    members: "5 працівників",
+    unread: 0,
+    online: true,
+  },
+];
+
+const employeeConversations = employeeDirectory.map((employee) => ({
+  id: employee.chatId,
+  name: employee.name,
+  type: employee.role,
+  members: employee.presence,
+  unread: 0,
+  online: employee.online,
+}));
+
+export const conversations = [...channelConversations, ...employeeConversations];
+
+export const initialMessages = {
+  general: [
+    { id: 1, author: "Ірина Савчук", role: "Адміністратор", text: "Оновлено графік резервного копіювання.", time: "09:15", mine: false },
+    { id: 2, author: "Олександр Дяченко", role: "Аналітик", text: "Підготував звіт по замовленнях за тиждень.", time: "09:40", mine: false },
+    { id: 3, author: "Ви", role: "Адміністратор", text: "Перевірю і додам у розділ звітів.", time: "09:44", mine: true },
+  ],
+  sales: [
+    { id: 1, author: "Марина Бойко", role: "Менеджер", text: "Клієнт ТОВ Компанія А просить підтвердити наявність товару.", time: "10:10", mine: false },
+    { id: 2, author: "Ви", role: "Адміністратор", text: "Передайте запит на склад, відповідь потрібна до обіду.", time: "10:12", mine: true },
+  ],
+  warehouse: [{ id: 1, author: "Андрій Мороз", role: "Комірник", text: "Ноутбуки Lenovo отримано, 12 одиниць вже на складі.", time: "08:55", mine: false }],
+  manager: [{ id: 1, author: "Марина Бойко", role: "Менеджер", text: "Можу додати нового клієнта після погодження договору?", time: "11:05", mine: false }],
+  oleksandr: [{ id: 1, author: "Олександр Дяченко", role: "Аналітик", text: "Я підготував фінансову вибірку для адміністратора.", time: "10:25", mine: false }],
+  iryna: [{ id: 1, author: "Ірина Савчук", role: "Адміністратор", text: "Потрібно перевірити права доступу для нового працівника.", time: "09:50", mine: false }],
+  logistics: [{ id: 1, author: "Дмитро Коваль", role: "Логіст", text: "Доставка по замовленню #10045 запланована на завтра.", time: "Вчора", mine: false }],
+  viktoriia: [{ id: 1, author: "Вікторія Лисенко", role: "Бухгалтер", text: "Рахунок від постачальника внесено в систему.", time: "12:05", mine: false }],
+  andrii: [{ id: 1, author: "Андрій Мороз", role: "Комірник", text: "Готовий видати товар після підтвердження замовлення.", time: "08:55", mine: false }],
+  serhii: [{ id: 1, author: "Сергій Павленко", role: "Оператор", text: "Прийняв три нові заявки від клієнтів.", time: "10:45", mine: false }],
+};
