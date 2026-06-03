@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { Building2, Eye, LockKeyhole, UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState("");
+
   return (
     <main className="login-screen">
       <section className="login-card" aria-labelledby="login-title">
@@ -20,8 +24,8 @@ export default function Login() {
           <label htmlFor="password">Пароль</label>
           <div className="input-control">
             <LockKeyhole size={18} />
-            <input id="password" type="password" placeholder="Введіть пароль" />
-            <button type="button" aria-label="Показати пароль">
+            <input id="password" type={showPassword ? "text" : "password"} placeholder="Введіть пароль" />
+            <button type="button" aria-label="Показати пароль" onClick={() => setShowPassword((isShown) => !isShown)}>
               <Eye size={19} />
             </button>
           </div>
@@ -35,8 +39,12 @@ export default function Login() {
               <input type="checkbox" />
               <span>Запам'ятати мене</span>
             </label>
-            <a href="/login">Забули пароль?</a>
+            <button className="link-button" type="button" onClick={() => setMessage("Інструкцію відновлення пароля підготовлено")}>
+              Забули пароль?
+            </button>
           </div>
+
+          {message ? <div className="inline-status">{message}</div> : null}
         </form>
 
         <footer>© 2024 Автоматизована система управління підприємством</footer>

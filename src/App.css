@@ -82,6 +82,29 @@
   background: var(--primary);
 }
 
+.sidebar-collapsed .sidebar {
+  width: 78px;
+  flex-basis: 78px;
+  align-items: center;
+}
+
+.sidebar-collapsed .brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar-collapsed .brand div:last-child,
+.sidebar-collapsed .side-link span,
+.sidebar-collapsed .logout-link span {
+  display: none;
+}
+
+.sidebar-collapsed .side-link {
+  width: 44px;
+  justify-content: center;
+  padding-inline: 0;
+}
+
 .logout-link {
   margin-top: auto;
 }
@@ -161,6 +184,59 @@
   background: #f04438;
   font-size: 10px;
   font-weight: 700;
+}
+
+.notification-menu {
+  position: relative;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 22;
+  width: 320px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 16px 36px rgba(31, 48, 65, 0.14);
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notification-header strong {
+  color: #172033;
+  font-size: 14px;
+}
+
+.notification-header button,
+.link-button {
+  border: 0;
+  color: var(--primary);
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.notification-dropdown p {
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid #edf1f6;
+  color: #344054;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.notification-dropdown p:last-child {
+  border-bottom: 0;
 }
 
 .profile-button {
@@ -750,6 +826,12 @@
   background: #ffffff;
 }
 
+.product-form input:disabled,
+.product-form select:disabled {
+  color: #667085;
+  background: #f7f9fc;
+}
+
 .product-form input:focus,
 .product-form select:focus {
   border-color: var(--primary);
@@ -1108,6 +1190,16 @@
   display: grid;
   place-items: center;
   color: #697586;
+}
+
+.inline-status {
+  padding: 10px 12px;
+  border-radius: 5px;
+  color: #1f7f49;
+  background: #effaf3;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .login-options {

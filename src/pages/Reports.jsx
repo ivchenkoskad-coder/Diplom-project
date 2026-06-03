@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BarChart3, Download, FileSpreadsheet, PieChart } from "lucide-react";
 
 const reports = [
@@ -7,6 +8,24 @@ const reports = [
 ];
 
 export default function Reports() {
+  const [message, setMessage] = useState("Звіти готові до експорту");
+
+  function exportData() {
+    const rows = [
+      ["Звіт", "Опис"],
+      ...reports.map((report) => [report.title, report.text]),
+    ];
+    const csv = rows.map((row) => row.map((cell) => `"${cell}"`).join(";")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "reports.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+    setMessage("Файл reports.csv сформовано");
+  }
+
   return (
     <div className="page">
       <header className="page-header">
@@ -14,11 +33,16 @@ export default function Reports() {
           <h1>Звіти</h1>
           <p>Аналітика діяльності підприємства</p>
         </div>
-        <button className="primary-button" type="button">
+        <button className="primary-button" type="button" onClick={exportData}>
           <Download size={18} />
           <span>Експорт даних</span>
         </button>
       </header>
+
+      <div className="settings-status">
+        <FileSpreadsheet size={18} />
+        <span>{message}</span>
+      </div>
 
       <section className="report-grid">
         {reports.map(({ title, text, icon: Icon }) => (

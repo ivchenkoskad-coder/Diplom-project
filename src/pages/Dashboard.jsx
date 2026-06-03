@@ -5,6 +5,7 @@ import {
   ShoppingCart,
   UsersRound,
 } from "lucide-react";
+import { useState } from "react";
 
 import DataTable from "../components/DataTable";
 import StatCard from "../components/StatCard";
@@ -97,6 +98,14 @@ function CategoryDonut() {
 }
 
 export default function Dashboard() {
+  const [period, setPeriod] = useState("За 6 місяців");
+  const periods = ["За 6 місяців", "За рік", "За місяць"];
+
+  function changePeriod() {
+    const currentIndex = periods.indexOf(period);
+    setPeriod(periods[(currentIndex + 1) % periods.length]);
+  }
+
   return (
     <div className="page dashboard-page">
       <section className="stats-grid">
@@ -116,8 +125,8 @@ export default function Dashboard() {
         <article className="panel large-panel">
           <div className="panel-heading">
             <h2>Динаміка продажів</h2>
-            <button className="select-button" type="button">
-              За 6 місяців
+            <button className="select-button" type="button" onClick={changePeriod}>
+              {period}
             </button>
           </div>
           <SalesChart />
